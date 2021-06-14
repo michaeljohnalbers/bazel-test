@@ -1,0 +1,23 @@
+load("@rules_python//python:defs.bzl", "py_binary", "py_library")
+load("@pip_requirements//:requirements.bzl", "requirement")
+load("@io_bazel_rules_docker//python3:image.bzl", "py3_image")
+
+MAIN_SRCS = glob(["*.py"])
+
+py_binary(
+  name="microservice3",
+  srcs=MAIN_SRCS,
+  main="main.py",
+  deps=[
+      requirement("numpy")
+  ]
+)
+
+py3_image(
+   name="image",
+   visibility=["//visibility:public"],
+   base="//base-images:python3.8",
+   srcs=MAIN_SRCS,
+   deps=[requirement("numpy")],
+   main="main.py"
+)

@@ -1,0 +1,24 @@
+load("@rules_python//python:packaging.bzl", "py_wheel", "py_package")
+
+MAIN_SRCS = glob(["*.py"])
+
+py_library(
+  name="wheel1_library",
+  srcs=MAIN_SRCS,
+  srcs_version="PY3"
+)
+
+# Doesn't appear to be necessary for a simple wheel like this.
+py_package(
+  name="wheel_package",
+  deps=[":wheel1_library"]
+)
+
+py_wheel(
+  name="wheel1",
+  distribution="wheel1_library",
+  python_tag="py3",
+  version="1.0",
+  deps=[":wheel_package"],
+  visibility=["//visibility:public"],  # Required for use in other packages
+)

@@ -1,0 +1,44 @@
+load(
+    "@io_bazel_rules_docker//container:container.bzl",
+    "container_image", "container_push"
+)
+
+# The base images for these must come from `container_pull` rules in the WORKSPACE file.
+# They won't actually be pulled until these rules are built for the first time.
+
+container_image(
+    name="python3.8",
+    visibility=["//visibility:public"],
+    base="@python3.8-base//image",
+    env={
+        "BAZEL_ENV_VAR": "dummy"
+    },
+    symlinks={
+        "/usr/bin/python": "/usr/local/bin/python",  # To work as base for py3_image
+        "/usr/bin/python3": "/usr/local/bin/python3"  # To work as base for py3_image
+    },
+    cmd=["python3", "-c", "import os, sys; print('hello from python', sys.version, ' container', os.environ['BAZEL_ENV_VAR'])"],
+)
+
+container_push(
+    name="python3.8-push",
+    image=":python3.8",
+    format="OCI",
+    registry="nexus.gs.mil",
+    repository="saffire/python3.8",
+    tag="latest"  # real way would be to use a variable provided during `bazel build`. Perhaps a git commit.
+)
+
+container_image(
+    name="python3.9",
+    visibility=["//visibility:public"],
+    base="@python3.9-base//image",
+    env={
+        "BAZEL_ENV_VAR": "dummy"
+    },
+    symlinks={
+        "/usr/bin/python": "/usr/local/bin/python",  # To work as base for py3_image
+        "/usr/bin/python3": "/usr/local/bin/python3"  # To work as base for py3_image
+    },
+    cmd=["python3", "-c", "import os, sys; print('hello from python', sys.version, 'container', os.environ['BAZEL_ENV_VAR'])"],
+)
