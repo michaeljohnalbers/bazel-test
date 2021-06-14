@@ -1,5 +1,5 @@
 # bazel-test
-Repository for testing out https://bazel.build
+Repository for testing out https://bazel.build. (Developed with bazel 4.1.0.)
 
 # Instructions
 1. Install bazel. Follow [this](https://docs.bazel.build/versions/4.1.0/bazel-overview.html#installing-bazel).
